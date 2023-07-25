@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wp
+  template:
+    metadata:
+      labels:
+        app: wp
+    spec:
+      containers:
+      - name: wordpress
+        image: wordpress
+        ports:
+        - containerPort: 80
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: mysql
+        - name: WORDPRESS_DB_PASSWORD
+          value: root
+        - name: WORDPRESS_DB_USER
+          value: wordpress
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wp-http
+spec:
+  type: NodePort
+  selector:
+    app: wp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+
+
+
