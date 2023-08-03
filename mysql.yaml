@@ -17,6 +17,16 @@ spec:
       containers:
       - name: mysql
         image: mysql:5.5
+        readinessProbe:
+          tcpSocket:
+            port: 3306
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket:
+            port: 3306
+          initialDelaySeconds: 20
+          periodSeconds: 5
+          failureThreshold: 3
         ports:
         - containerPort: 3306
         imagePullPolicy: IfNotPresent
